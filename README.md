@@ -2,8 +2,8 @@
 	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
 ]]
 -- LocalScript: StarterPlayer > StarterPlayerScripts
--- Criador: chatgpt (para uso no SEU jogo)
--- Nome do Hub: We| Roube um Brainrot
+-- Criador: ChatGPT (para uso no SEU jogo)
+-- Nome do Hub: wendely
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -13,7 +13,7 @@ local player = Players.LocalPlayer
 
 -- === GUI PRINCIPAL ===
 local gui = Instance.new("ScreenGui")
-gui.Name = "wendel"
+gui.Name = "wendely"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
@@ -31,7 +31,7 @@ corner.CornerRadius = UDim.new(0, 16)
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 36)
 title.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-title.Text = "⚡ wendel ⚡"
+title.Text = "⚡ wendly ⚡"
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -163,4 +163,52 @@ tpBtn.MouseButton1Click:Connect(function()
 	local char = player.Character
 	if char and char:FindFirstChild("HumanoidRootPart") then
 		local hrp = char.HumanoidRootPart
-		local lookVector = hrp.CFrame
+		local lookVector = hrp.CFrame.LookVector
+		local distanceStuds = 7 / 0.28
+		hrp.CFrame = hrp.CFrame + (lookVector * distanceStuds)
+	end
+end)
+
+-- === Invisível ===
+local invisibleOn = false
+local storedTransparency = {}
+local function setInvisible(char, enabled)
+	for _, part in ipairs(char:GetDescendants()) do
+		if part:IsA("BasePart") or part:IsA("Decal") then
+			if enabled then
+				storedTransparency[part] = part.Transparency
+				part.Transparency = 1
+			else
+				if storedTransparency[part] ~= nil then
+					part.Transparency = storedTransparency[part]
+				else
+					part.Transparency = 0
+				end
+			end
+		elseif part:IsA("Accessory") and part:FindFirstChild("Handle") then
+			if enabled then
+				storedTransparency[part.Handle] = part.Handle.Transparency
+				part.Handle.Transparency = 1
+			else
+				if storedTransparency[part.Handle] ~= nil then
+					part.Handle.Transparency = storedTransparency[part.Handle]
+				else
+					part.Handle.Transparency = 0
+				end
+			end
+		end
+	end
+end
+invisBtn.MouseButton1Click:Connect(function()
+	local char = player.Character
+	if not char then return end
+	if invisibleOn then
+		invisibleOn = false
+		invisBtn.Text = "Invisível: OFF"
+		setInvisible(char, false)
+	else
+		invisibleOn = true
+		invisBtn.Text = "Invisível: ON"
+		setInvisible(char, true)
+	end
+end)
