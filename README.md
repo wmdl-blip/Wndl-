@@ -19,7 +19,7 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 -- Janela central
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 280, 0, 280)
+mainFrame.Size = UDim2.new(580,460)
 mainFrame.Position = UDim2.new(0.5, -140, 0.5, -140)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 mainFrame.Visible = true
@@ -132,7 +132,7 @@ local jumpConn
 local function enableSuperJump()
 	if superJumpOn then return end
 	superJumpOn = true
-	jumpBtn.Text = "Super Pulo (100 m): ON"
+	jumpBtn.Text = "Super Pulo (35 m): ON"
 	jumpConn = UserInputService.JumpRequest:Connect(function()
 		local char = player.Character
 		if not char then return end
@@ -146,7 +146,7 @@ local function enableSuperJump()
 end
 local function disableSuperJump()
 	superJumpOn = false
-	jumpBtn.Text = "Super Pulo (100 m): OFF"
+	jumpBtn.Text = "Super Pulo (35 m): OFF"
 	if jumpConn then jumpConn:Disconnect(); jumpConn = nil end
 	local char = player.Character
 	if char then
@@ -212,3 +212,66 @@ invisBtn.MouseButton1Click:Connect(function()
 		setInvisible(char, true)
 	end
 end)
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Controle de Velocidade</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    #velocidade {
+      font-size: 48px;
+      margin: 20px 0;
+    }
+
+    #botao {
+      padding: 10px 30px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Controle de Velocidade</h1>
+  <div id="velocidade">Velocidade: 0</div>
+  <button id="botao">Ligar</button>
+
+  <script>
+    let ligado = false;
+    let velocidade = 0;
+    let intervalo = null;
+
+    const velocidadeDisplay = document.getElementById('velocidade');
+    const botao = document.getElementById('botao');
+
+    botao.addEventListener('click', () => {
+      ligado = !ligado;
+
+      if (ligado) {
+        botao.textContent = 'Desligar';
+        intervalo = setInterval(() => {
+          if (velocidade < 100) {
+            velocidade++;
+            atualizarVelocidade();
+          }
+        }, 100); // Aumenta a cada 100ms
+      } else {
+        botao.textContent = 'Ligar';
+        clearInterval(intervalo);
+      }
+    });
+
+    function atualizarVelocidade() {
+      velocidadeDisplay.textContent = `Velocidade: ${velocidade}`;
+    }
+  </script>
+
+</body>
+</html>
